@@ -16,12 +16,12 @@ type fileFetcherExtender struct {
 	*DefaultExtender
 }
 
-// FileFetcher constructor, creates the internal default implementation
+// newFileFetcher; constructor, creates the internal default implementation
 func newFileFetcher() *fileFetcherExtender {
 	return &fileFetcherExtender{new(DefaultExtender)}
 }
 
-// FileFetcher's Fetch() implementation
+// Fetch; Fetch() implementation
 func (x *fileFetcherExtender) Fetch(ctx *URLContext, userAgent string, headRequest bool) (*http.Response, error) {
 	var res = new(http.Response)
 	var req *http.Request

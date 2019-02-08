@@ -74,7 +74,7 @@ func (c *Crawler) Run(seeds interface{}) error {
 	return err
 }
 
-// Initialize the Crawler's internal fields before a crawling execution.
+// init; the Crawler's internal fields before a crawling execution.
 func (c *Crawler) init(ctxs []*URLContext) {
 	// Initialize the internal hosts map
 	c.hosts = make(map[string]struct{}, len(ctxs))
@@ -113,7 +113,7 @@ func (c *Crawler) init(ctxs []*URLContext) {
 	c.setExtenderEnqueueChan()
 }
 
-// Set the Enqueue channel on the extender, based on the naming convention.
+// setExtenderEnqueueChan; Set the Enqueue channel on the extender, based on the naming convention.
 func (c *Crawler) setExtenderEnqueueChan() {
 	defer func() {
 		if err := recover(); err != nil {
@@ -151,7 +151,7 @@ func (c *Crawler) setExtenderEnqueueChan() {
 	ec.Set(src)
 }
 
-// Launch a new worker goroutine for a given host.
+// launchWorker; a new worker goroutine for a given host.
 func (c *Crawler) launchWorker(ctx *URLContext) *worker {
 	// Initialize index and channels
 	i := len(c.workers) + 1
@@ -181,7 +181,7 @@ func (c *Crawler) launchWorker(ctx *URLContext) *worker {
 	return w
 }
 
-// Check if the specified URL is from the same host as its source URL, or if
+// isSameHost checks if the specified URL is from the same host as its source URL, or if
 // nil, from the same host as one of the seed URLs.
 func (c *Crawler) isSameHost(ctx *URLContext) bool {
 	// If there is a source URL, then just check if the new URL is from the same host
@@ -194,7 +194,7 @@ func (c *Crawler) isSameHost(ctx *URLContext) bool {
 	return ok
 }
 
-// Enqueue the URLs returned from the worker, as long as it complies with the
+// enqueueUrls; the URLs returned from the worker, as long as it complies with the
 // selection policies.
 func (c *Crawler) enqueueUrls(ctxs []*URLContext) (cnt int) {
 	for _, ctx := range ctxs {
@@ -272,7 +272,7 @@ func (c *Crawler) enqueueUrls(ctxs []*URLContext) (cnt int) {
 	return
 }
 
-// This is the main loop of the crawler, waiting for responses from the workers
+// collectUrls is the main loop of the crawler, waiting for responses from the workers
 // and processing these responses.
 func (c *Crawler) collectUrls() error {
 	defer func() {

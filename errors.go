@@ -74,12 +74,12 @@ func (ce CrawlError) Error() string {
 	return ce.msg
 }
 
-// Create a new CrawlError based on a source error.
+// newCrawlError; Create a new CrawlError based on a source error.
 func newCrawlError(ctx *URLContext, e error, kind CrawlErrorKind) *CrawlError {
 	return &CrawlError{ctx, e, kind, ""}
 }
 
-// Create a new CrawlError with the specified message.
+// newCrawlErrorMessage; Create a new CrawlError with the specified message.
 func newCrawlErrorMessage(ctx *URLContext, msg string, kind CrawlErrorKind) *CrawlError {
 	return &CrawlError{ctx, nil, kind, msg}
 }

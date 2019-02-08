@@ -18,7 +18,7 @@ type ExampleExtender struct {
 	gocrawl.DefaultExtender // Will use the default implementation of all but Visit and Filter
 }
 
-// Override Visit for our need.
+// Visit; Override Visit for our need.
 func (x *ExampleExtender) Visit(ctx *gocrawl.URLContext, res *http.Response, doc *goquery.Document) (interface{}, bool) {
 	// Use the goquery document or res.Body to manipulate the data
 	// ...
@@ -27,7 +27,7 @@ func (x *ExampleExtender) Visit(ctx *gocrawl.URLContext, res *http.Response, doc
 	return nil, true
 }
 
-// Override Filter for our need.
+// Filter; Override Filter for our need.
 func (x *ExampleExtender) Filter(ctx *gocrawl.URLContext, isVisited bool) bool {
 	return !isVisited && rxOk.MatchString(ctx.NormalizedURL().String())
 }

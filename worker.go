@@ -44,7 +44,7 @@ type worker struct {
 	opts           *Options
 }
 
-// Start crawling the host.
+// run starts crawling the host.
 func (w *worker) run() {
 	defer func() {
 		w.logFunc(LogInfo, "worker done.")
@@ -103,7 +103,7 @@ func (w *worker) run() {
 	}
 }
 
-// Checks if the given URL can be fetched based on robots.txt policies.
+// isAllowedPerRobotsPolicies checks if the given URL can be fetched based on robots.txt policies.
 func (w *worker) isAllowedPerRobotsPolicies(u *url.URL) bool {
 	if w.robotsGroup != nil {
 		// Is this URL allowed per robots.txt policy?
@@ -118,7 +118,7 @@ func (w *worker) isAllowedPerRobotsPolicies(u *url.URL) bool {
 	return true
 }
 
-// Process the specified URL.
+// requestURL process the specified URL.
 func (w *worker) requestURL(ctx *URLContext, headRequest bool) {
 	if res, ok := w.fetchURL(ctx, w.opts.UserAgent, headRequest); ok {
 		var harvested interface{}
@@ -141,7 +141,7 @@ func (w *worker) requestURL(ctx *URLContext, headRequest bool) {
 	}
 }
 
-// Process the robots.txt URL.
+// requestRobotsTxt process the robots.txt URL.
 func (w *worker) requestRobotsTxt(ctx *URLContext) {
 	// Ask if it should be fetched
 	if robData, reqRob := w.opts.Extender.RequestRobots(ctx, w.opts.RobotUserAgent); !reqRob {
@@ -155,7 +155,7 @@ func (w *worker) requestRobotsTxt(ctx *URLContext) {
 	}
 }
 
-// Get the robots.txt group for this crawler.
+// getRobotsTxtGroup gets the robots.txt group for this crawler.
 func (w *worker) getRobotsTxtGroup(ctx *URLContext, b []byte, res *http.Response) (g *robotstxt.Group) {
 	var data *robotstxt.RobotsData
 	var e error
@@ -185,7 +185,7 @@ func (w *worker) getRobotsTxtGroup(ctx *URLContext, b []byte, res *http.Response
 	return g
 }
 
-// Set the crawl delay between this request and the next.
+// setCrawlDelay; Set the crawl delay between this request and the next.
 func (w *worker) setCrawlDelay() {
 	var robDelay time.Duration
 
@@ -202,7 +202,7 @@ func (w *worker) setCrawlDelay() {
 	w.logFunc(LogInfo, "using crawl-delay: %v", w.lastCrawlDelay)
 }
 
-// Request the specified URL and return the response.
+// fetchURL; Request the specified URL and return the response.
 func (w *worker) fetchURL(ctx *URLContext, agent string, headRequest bool) (res *http.Response, ok bool) {
 	var e error
 	var silent bool
@@ -294,7 +294,7 @@ func (w *worker) fetchURL(ctx *URLContext, agent string, headRequest bool) (res 
 	return
 }
 
-// Send a response to the crawler.
+// sendResponse; a response to the crawler.
 func (w *worker) sendResponse(ctx *URLContext, visited bool, harvested interface{}, idleDeath bool) {
 	// Push harvested urls back to crawler, even if empty (uses the channel communication
 	// to decrement reference count of pending URLs)
@@ -321,7 +321,7 @@ func (w *worker) sendResponse(ctx *URLContext, visited bool, harvested interface
 	}
 }
 
-// Process the response for a URL.
+// visitURL process the response for a URL.
 func (w *worker) visitURL(ctx *URLContext, res *http.Response) interface{} {
 	var doc *goquery.Document
 	var harvested interface{}
@@ -381,7 +381,7 @@ func handleBaseTag(root *url.URL, baseHref string, aHref string) string {
 	return resolvedURL.String()
 }
 
-// Scrape the document's content to gather all links
+// processLinks; Scrape the document's content to gather all links
 func (w *worker) processLinks(doc *goquery.Document) (result []*url.URL) {
 	baseURL, _ := doc.Find("base[href]").Attr("href")
 	urls := doc.Find("a[href]").Map(func(_ int, s *goquery.Selection) string {

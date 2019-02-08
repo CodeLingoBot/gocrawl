@@ -97,7 +97,7 @@ func (uc *URLContext) cloneForRedirect(dst *url.URL, normFlags purell.Normalizat
 	}
 }
 
-// Implement in a private func, because called from HttpClient also (without
+// isRobotsURL; Implement in a private func, because called from HttpClient also (without
 // an URLContext).
 func isRobotsURL(u *url.URL) bool {
 	if u == nil {

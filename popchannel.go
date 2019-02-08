@@ -4,14 +4,14 @@ package gocrawl
 // to process.
 type popChannel chan []*URLContext
 
-// Constructor to create and initialize a popChannel
+// newPopChannel; Constructor to create and initialize a popChannel
 func newPopChannel() popChannel {
 	// The pop channel is stacked, so only a buffer of 1 is required
 	// see http://gowithconfidence.tumblr.com/post/31426832143/stacked-channels
 	return make(chan []*URLContext, 1)
 }
 
-// The stack function ensures the specified URLs are added to the pop channel
+// stack; function ensures the specified URLs are added to the pop channel
 // with minimal blocking (since the channel is stacked, it is virtually equivalent
 // to an infinitely buffered channel).
 func (pc popChannel) stack(cmd ...*URLContext) {
